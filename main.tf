@@ -42,7 +42,7 @@ resource "google_compute_router" "router" {
 module "cloud-nat" {
   depends_on                         = [google_compute_network.network]
   source                             = "terraform-google-modules/cloud-nat/google"
-  version                            = "4.0.0"
+  version                            = "5.0"
   count                              = var.enable_nat_gateway ? 1 : 0
   project_id                         = local.project_name
   region                             = local.region
@@ -60,7 +60,7 @@ module "cloud-nat" {
 
 module "firewall_rules" {
   source       = "terraform-google-modules/network/google//modules/firewall-rules"
-  version      = "~> 7.0"
+  version      = "~> 9.0"
   project_id   = local.project_name
   network_name = google_compute_network.network.self_link
   depends_on   = [google_compute_network.network]
