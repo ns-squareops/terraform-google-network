@@ -1,7 +1,7 @@
 locals {
   region       = "asia-south1"
   environment  = "dev"
-  name         = "atmosly"
+  name         = "atmoslyy"
   project_name = "atmosly-439606"
 }
 
@@ -12,6 +12,7 @@ module "vpc" {
   environment   = local.environment
   region        = local.region
   ip_cidr_range = "10.128.0.0/16"
+  private_ip_cidr_range = "10.130.0.0/16"
   secondary_ip_range = [
     {
       range_name    = "tf-test-secondary-range1"
@@ -28,4 +29,6 @@ module "vpc" {
   db_private_access          = true
   create_vpn                 = false
   vpc_flow_logs              = true
+
+
 }

@@ -30,6 +30,22 @@ module "subnets" {
   log_config                 = var.log_config
 }
 
+module "private_subnet" {
+  depends_on = [module.subnets]
+  source     = "./modules/Private_subnet"
+
+  name                       = format("%s-%s-private-subnet", var.environment, var.name)
+  private_ip_cidr_range      = var.private_ip_cidr_range
+  private_ip_google_access   = var.private_ip_google_access
+  private_ipv6_google_access = var.private_ipv6_google_access
+  region                     = var.region
+  secondary_ip_range         = var.secondary_ip_range  # Secondary IP ranges for private subnet
+  network_name               = google_compute_network.network.self_link
+  project_id                 = local.project_name
+  flow_logs                  = var.vpc_flow_logs
+  log_config                 = var.log_config
+}
+
 resource "google_compute_router" "router" {
   count      = var.enable_nat_gateway ? 1 : 0
   project    = local.project_name
@@ -127,7 +143,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 }
 
 module "vpn_server" {
-  depends_on   = [module.subnets]
+  depends_on   = [module.private_subnet]
   source       = "./modules/vpn"
   count        = var.create_vpn ? 1 : 0
   project_name = local.project_name

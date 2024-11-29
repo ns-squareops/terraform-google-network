@@ -130,3 +130,8 @@ variable "vpc_flow_logs" {
   default     = false
   description = "Enable or disable flow logging for subnets."
 }
+
+variable "private_ip_cidr_range" {
+  type        = string
+  description = "The IP CIDR range for the subnet."
+}
