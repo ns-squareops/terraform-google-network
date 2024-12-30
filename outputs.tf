@@ -33,10 +33,10 @@
 #   value       = var.create_vpn ? module.vpn_server[0].vpn_zone : null
 # }
 
-# output "subnet_name" {
-#   value       = module.subnets.subnet_name
-#   description = "List of Subnets created"
-# }
+output "subnet_name" {
+  value       = module.subnets.subnet_name
+  description = "List of Subnets created"
+}
 
 # output "secondary_ip_range" {
 #   value       = module.subnets.secondary_ip_range

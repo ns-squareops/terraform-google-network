@@ -20,7 +20,7 @@ module "subnets" {
 
   name                       = format("%s-%s-subnet", var.environment, var.name)
   ip_cidr_range              = var.ip_cidr_range
-  private_ip_google_access   = var.private_ip_google_access
+  private_ip_google_access   = false  #var.private_ip_google_access
   private_ipv6_google_access = var.private_ipv6_google_access
   region                     = var.region
   secondary_ip_range         = var.secondary_ip_range
@@ -31,12 +31,28 @@ module "subnets" {
 }
 
 module "private_subnet" {
-  depends_on = [module.subnets]
+  depends_on = [google_compute_network.network]
   source     = "./modules/Private_subnet"
 
   name                       = format("%s-%s-private-subnet", var.environment, var.name)
   private_ip_cidr_range      = var.private_ip_cidr_range
-  private_ip_google_access   = var.private_ip_google_access
+  private_ip_google_access   = true #var.private_ip_google_access
+  private_ipv6_google_access = var.private_ipv6_google_access
+  region                     = var.region
+  secondary_ip_range         = var.secondary_ip_range  # Secondary IP ranges for private subnet
+  network_name               = google_compute_network.network.self_link
+  project_id                 = local.project_name
+  flow_logs                  = var.vpc_flow_logs
+  log_config                 = var.log_config
+}
+
+module "LB_subnet" {
+  depends_on = [google_compute_network.network]
+  source     = "./modules/LB_subnet"
+
+  name                       = format("%s-%s-internal-lb-proxy-subnet", var.environment, var.name)
+  lb_ip_cidr_range           = var.lb_ip_cidr_range
+  private_ip_google_access   = true #var.private_ip_google_access
   private_ipv6_google_access = var.private_ipv6_google_access
   region                     = var.region
   secondary_ip_range         = var.secondary_ip_range  # Secondary IP ranges for private subnet

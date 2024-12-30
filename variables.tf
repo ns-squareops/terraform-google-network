@@ -135,3 +135,8 @@ variable "private_ip_cidr_range" {
   type        = string
   description = "The IP CIDR range for the subnet."
 }
+
+variable "lb_ip_cidr_range" {
+  type        = string
+  description = "The IP CIDR range for the subnet."
+}
