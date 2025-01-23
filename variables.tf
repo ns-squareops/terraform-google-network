@@ -132,8 +132,9 @@ variable "vpc_flow_logs" {
 }
 
 variable "private_ip_cidr_range" {
-  type        = string
-  description = "The IP CIDR range for the subnet."
+  description = "List of CIDR ranges for private subnets"
+  type        = list(string)
+  default     = []
 }
 
 variable "lb_ip_cidr_range" {

@@ -1,6 +1,6 @@
 locals {
   region       = "asia-south1"
-  environment  = "dev"
+  environment  = ""
   name         = ""
   project_name = "atmosly-439606"
 }
@@ -11,9 +11,9 @@ module "vpc" {
   project_name  = local.project_name
   environment   = local.environment
   region        = local.region
-  ip_cidr_range = "10.128.0.0/16"
-  private_ip_cidr_range = "10.130.0.0/16"
-  lb_ip_cidr_range = "10.131.0.0/16"
+  ip_cidr_range = "10.128.0.0/16"   # for public subnet only
+  private_ip_cidr_range = ["10.130.0.0/16" , "10.134.0.0/16"]  # for private subnet .
+  lb_ip_cidr_range = "10.131.0.0/16"   # for loadbalancer proxy subnet.
   secondary_ip_range = [
     {
       range_name    = "tf-test-secondary-range1"
