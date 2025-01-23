@@ -3,7 +3,8 @@ locals {
   project_name = var.project_name
   environment  = var.environment
   name         = var.name
-}
+ }
+
 
 resource "google_compute_network" "network" {
   name                            = "${var.name}-vpc"
@@ -32,10 +33,10 @@ module "subnets" {
 
 module "private_subnet" {
   depends_on = [google_compute_network.network]
+  for_each = toset(var.private_ip_cidr_range)  # Iterate through the list of CIDR ranges
   source     = "./modules/Private_subnet"
-
-  name                       = format("%s-%s-private-subnet", var.environment, var.name)
-  private_ip_cidr_range      = var.private_ip_cidr_range
+  name                       = format("%s-private-subnet-%d", var.environment, index(var.private_ip_cidr_range, each.key) + 1)
+  private_ip_cidr_range       = each.key
   private_ip_google_access   = true #var.private_ip_google_access
   private_ipv6_google_access = var.private_ipv6_google_access
   region                     = var.region
@@ -72,7 +73,7 @@ resource "google_compute_router" "router" {
 }
 
 module "cloud-nat" {
-  depends_on                         = [google_compute_network.network]
+  depends_on                        = [google_compute_network.network, module.private_subnet]  # Ensure the private subnet is ready
   source                             = "terraform-google-modules/cloud-nat/google"
   version                            = "5.0"
   count                              = var.enable_nat_gateway ? 1 : 0
@@ -80,7 +81,7 @@ module "cloud-nat" {
   region                             = local.region
   router                             = google_compute_router.router[0].name
   name                               = format("%s-%s-nat", local.name, local.environment)
-  source_subnetwork_ip_ranges_to_nat = var.source_subnetwork_ip_ranges_to_nat
+  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
   log_config_enable                  = var.vpc_flow_logs
   log_config_filter                  = var.log_config_filter_nat
   min_ports_per_vm                   = "128"
@@ -88,6 +89,13 @@ module "cloud-nat" {
   tcp_established_idle_timeout_sec   = "1200"
   tcp_transitory_idle_timeout_sec    = "30"
   udp_idle_timeout_sec               = "30"
+  subnetworks = [
+    for idx, cidr in tolist(var.private_ip_cidr_range) : {
+      name                     = format("%s-private-subnet-%d", var.environment, idx + 1) # Corrected here
+      source_ip_ranges_to_nat  = ["ALL_IP_RANGES"]
+      secondary_ip_range_names = []
+    }
+  ]  
 }
 
 module "firewall_rules" {
