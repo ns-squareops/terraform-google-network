@@ -5,7 +5,7 @@ resource "google_compute_subnetwork" "subnetwork" {
   name                       = var.name
   ip_cidr_range              = var.ip_cidr_range
   region                     = var.region
-  private_ip_google_access   = false       #var.private_ip_google_access
+  private_ip_google_access   = false #var.private_ip_google_access
   private_ipv6_google_access = var.private_ipv6_google_access
   network                    = var.network_name
   project                    = var.project_id
@@ -18,7 +18,7 @@ resource "google_compute_subnetwork" "subnetwork" {
       metadata             = var.log_config.metadata
     }
   }
-  
+
   purpose    = var.purpose
   role       = var.role
   stack_type = var.stack_type
@@ -70,13 +70,9 @@ resource "google_compute_subnetwork" "subnetwork" {
 #       range_name    = secondary_ip_range.value.range_name
 #       ip_cidr_range = secondary_ip_range.value.ip_cidr_range
 #     }
-#   } 
+#   }
 
 #   purpose    = var.purpose
 #   role       = var.role
 #   stack_type = var.stack_type
 # }
-
-
-
-

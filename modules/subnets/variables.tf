@@ -66,7 +66,7 @@ variable "private_ip_google_access" {
 variable "private_ipv6_google_access" {
   description = "Flag to enable or disable private IPv6 Google access."
   type        = bool
-  default     = null
+  default     = false
 }
 
 # variable "secondary_ip_range" {
@@ -82,7 +82,7 @@ variable "secondary_ip_range" {
     range_name    = string
     ip_cidr_range = string
   }))
-  default = []  # Set default to an empty list if no secondary ranges are specified
+  default = [] # Set default to an empty list if no secondary ranges are specified
 }
 
 

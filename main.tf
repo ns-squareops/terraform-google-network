@@ -3,7 +3,7 @@ locals {
   project_name = var.project_name
   environment  = var.environment
   name         = var.name
- }
+}
 
 
 resource "google_compute_network" "network" {
@@ -21,7 +21,7 @@ module "subnets" {
 
   name                       = format("%s-%s-subnet", var.environment, var.name)
   ip_cidr_range              = var.ip_cidr_range
-  private_ip_google_access   = false  #var.private_ip_google_access
+  private_ip_google_access   = false #var.private_ip_google_access
   private_ipv6_google_access = var.private_ipv6_google_access
   region                     = var.region
   secondary_ip_range         = var.secondary_ip_range
@@ -32,19 +32,24 @@ module "subnets" {
 }
 
 module "private_subnet" {
-  depends_on = [google_compute_network.network]
-  for_each = toset(var.private_ip_cidr_range)  # Iterate through the list of CIDR ranges
-  source     = "./modules/Private_subnet"
-  name                       = format("%s-private-subnet-%d", var.environment, index(var.private_ip_cidr_range, each.key) + 1)
-  private_ip_cidr_range       = each.key
-  private_ip_google_access   = true #var.private_ip_google_access
+  depends_on                 = [google_compute_network.network]
+  for_each                   = { for idx, cidr in var.private_ip_cidr_range : cidr => idx } # Create a map for easy access to the index
+  source                     = "./modules/Private_subnet"
+  name                       = format("%s-%s-private-subnet-%d", var.environment, var.name, each.value + 1)
+  private_ip_cidr_range      = each.key # Pass the CIDR range (10.x.x.x/16) directly as a string
+  private_ip_google_access   = true
   private_ipv6_google_access = var.private_ipv6_google_access
   region                     = var.region
-  secondary_ip_range         = var.secondary_ip_range  # Secondary IP ranges for private subnet
-  network_name               = google_compute_network.network.self_link
-  project_id                 = local.project_name
-  flow_logs                  = var.vpc_flow_logs
-  log_config                 = var.log_config
+  secondary_ip_range = [
+    {
+      range_name    = format("tf-test-secondary-range%d", each.value + 1)
+      ip_cidr_range = format("192.168.%d.0/24", each.value + 10) # Assign a CIDR based on the index
+    }
+  ]
+  network_name = google_compute_network.network.self_link
+  project_id   = local.project_name
+  flow_logs    = var.vpc_flow_logs
+  log_config   = var.log_config
 }
 
 module "LB_subnet" {
@@ -56,7 +61,7 @@ module "LB_subnet" {
   private_ip_google_access   = true #var.private_ip_google_access
   private_ipv6_google_access = var.private_ipv6_google_access
   region                     = var.region
-  secondary_ip_range         = var.secondary_ip_range  # Secondary IP ranges for private subnet
+  secondary_ip_range         = var.secondary_ip_range # Secondary IP ranges for private subnet
   network_name               = google_compute_network.network.self_link
   project_id                 = local.project_name
   flow_logs                  = var.vpc_flow_logs
@@ -73,7 +78,7 @@ resource "google_compute_router" "router" {
 }
 
 module "cloud-nat" {
-  depends_on                        = [google_compute_network.network, module.private_subnet]  # Ensure the private subnet is ready
+  depends_on                         = [google_compute_network.network, module.private_subnet] # Ensure the private subnet is ready
   source                             = "terraform-google-modules/cloud-nat/google"
   version                            = "5.0"
   count                              = var.enable_nat_gateway ? 1 : 0
@@ -91,11 +96,11 @@ module "cloud-nat" {
   udp_idle_timeout_sec               = "30"
   subnetworks = [
     for idx, cidr in tolist(var.private_ip_cidr_range) : {
-      name                     = format("%s-private-subnet-%d", var.environment, idx + 1) # Corrected here
+      name                     = format("%s-%s-private-subnet-%d", var.environment, var.name, idx + 1) # Corrected here
       source_ip_ranges_to_nat  = ["ALL_IP_RANGES"]
       secondary_ip_range_names = []
     }
-  ]  
+  ]
 }
 
 module "firewall_rules" {

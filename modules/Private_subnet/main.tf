@@ -5,7 +5,7 @@ resource "google_compute_subnetwork" "private_subnet" {
   name                       = var.name
   ip_cidr_range              = var.private_ip_cidr_range
   region                     = var.region
-  private_ip_google_access   = true                    #var.private_ip_google_access
+  private_ip_google_access   = true #var.private_ip_google_access
   private_ipv6_google_access = var.private_ipv6_google_access
   network                    = var.network_name
   project                    = var.project_id
@@ -18,15 +18,15 @@ resource "google_compute_subnetwork" "private_subnet" {
       metadata             = var.log_config.metadata
     }
   }
-  
- dynamic "secondary_ip_range" {
+
+  dynamic "secondary_ip_range" {
     for_each = var.secondary_ip_range != null ? var.secondary_ip_range : []
 
     content {
       range_name    = secondary_ip_range.value.range_name
       ip_cidr_range = secondary_ip_range.value.ip_cidr_range
     }
-  } 
+  }
 
   purpose    = var.purpose
   role       = var.role
