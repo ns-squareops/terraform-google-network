@@ -40,16 +40,11 @@ module "private_subnet" {
   private_ip_google_access   = true
   private_ipv6_google_access = var.private_ipv6_google_access
   region                     = var.region
-  secondary_ip_range = [
-    {
-      range_name    = format("tf-test-secondary-range%d", each.value + 1)
-      ip_cidr_range = format("192.168.%d.0/24", each.value + 10) # Assign a CIDR based on the index
-    }
-  ]
-  network_name = google_compute_network.network.self_link
-  project_id   = local.project_name
-  flow_logs    = var.vpc_flow_logs
-  log_config   = var.log_config
+  secondary_ip_range         = [var.secondary_ip_range[each.value]] # Pass as a list of objects
+  network_name               = google_compute_network.network.self_link
+  project_id                 = local.project_name
+  flow_logs                  = var.vpc_flow_logs
+  log_config                 = var.log_config
 }
 
 module "LB_subnet" {

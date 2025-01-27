@@ -41,5 +41,9 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_name"></a> [name](#output\_name) | The name of the private subnet. |
+| <a name="output_private_ip_cidr"></a> [private\_ip\_cidr](#output\_private\_ip\_cidr) | The IP ranges of the private subnet. |
+| <a name="output_secondary_ip_range"></a> [secondary\_ip\_range](#output\_secondary\_ip\_range) | The secondary IP ranges of the private subnet. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

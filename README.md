@@ -114,7 +114,7 @@ In order to execute this module you must have a Service Account with the roles m
 | <a name="input_project_name"></a> [project\_name](#input\_project\_name) | The project ID where the resources will be deployed. | `string` | `"fresh-sanctuary-389006"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where the resources will be deployed. | `string` | `"asia-south1"` | no |
 | <a name="input_routing_mode"></a> [routing\_mode](#input\_routing\_mode) | The network routing mode (default 'GLOBAL') | `string` | `"GLOBAL"` | no |
-| <a name="input_secondary_ip_range"></a> [secondary\_ip\_range](#input\_secondary\_ip\_range) | List of secondary IP ranges for the subnetwork. Each element in the list must have 'range\_name' and 'ip\_cidr\_range' attributes. | <pre>list(object({<br/>    range_name    = string<br/>    ip_cidr_range = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_secondary_ip_range"></a> [secondary\_ip\_range](#input\_secondary\_ip\_range) | List of secondary IP ranges for each private subnet | <pre>list(object({<br/>    range_name    = string<br/>    ip_cidr_range = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_source_subnetwork_ip_ranges_to_nat"></a> [source\_subnetwork\_ip\_ranges\_to\_nat](#input\_source\_subnetwork\_ip\_ranges\_to\_nat) | (Optional) Specifies how NAT should be configured per Subnetwork. Valid values include: ALL\_SUBNETWORKS\_ALL\_IP\_RANGES, ALL\_SUBNETWORKS\_ALL\_PRIMARY\_IP\_RANGES, LIST\_OF\_SUBNETWORKS. Changing this forces a new NAT to be created. Defaults to ALL\_SUBNETWORKS\_ALL\_IP\_RANGES. | `string` | `"ALL_SUBNETWORKS_ALL_IP_RANGES"` | no |
 | <a name="input_vpc_flow_logs"></a> [vpc\_flow\_logs](#input\_vpc\_flow\_logs) | Enable or disable flow logging for subnets. | `bool` | `false` | no |
 
@@ -122,7 +122,12 @@ In order to execute this module you must have a Service Account with the roles m
 
 | Name | Description |
 |------|-------------|
-| <a name="output_subnet_name"></a> [subnet\_name](#output\_subnet\_name) | List of Subnets created |
+| <a name="output_lb_subnet_details"></a> [lb\_subnet\_details](#output\_lb\_subnet\_details) | Details of LB subnets created, including their names and CIDR ranges. |
+| <a name="output_private_subnet_details"></a> [private\_subnet\_details](#output\_private\_subnet\_details) | Details of all private subnets created, including their names, CIDR ranges, and secondary IP ranges. |
+| <a name="output_public_subnet_details"></a> [public\_subnet\_details](#output\_public\_subnet\_details) | Details of all public subnets created, including their names and CIDR ranges. |
+| <a name="output_region"></a> [region](#output\_region) | The region where the VPC is located. |
+| <a name="output_vpc_details"></a> [vpc\_details](#output\_vpc\_details) | Details of the VPC being created, including name, ID, and self-link. |
+| <a name="output_vpn_details"></a> [vpn\_details](#output\_vpn\_details) | Details of the Pritunl VPN instance. Null if VPN creation is disabled. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 

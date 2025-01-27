@@ -1,9 +1,13 @@
-# output "private_subnet_name" {
-#   value       = google_compute_subnetwork.private_subnet.name
-#   description = "The name of created subnet resources"
-# }
+output "name" {
+  description = "The name of the private subnet."
+  value       = google_compute_subnetwork.private_subnet.name
+}
 
-# output "private_secondary_ip_range" {
-#   value       = google_compute_subnetwork.private_subnet.secondary_ip_range
-#   description = "The details of secondary ip range of subnet"
-# }
+output "secondary_ip_range" {
+  description = "The secondary IP ranges of the private subnet."
+  value       = google_compute_subnetwork.private_subnet.secondary_ip_range
+}
+output "private_ip_cidr" {
+  description = "The IP ranges of the private subnet."
+  value       = google_compute_subnetwork.private_subnet.ip_cidr_range
+}

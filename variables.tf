@@ -98,14 +98,12 @@ variable "source_subnetwork_ip_ranges_to_nat" {
 }
 
 variable "secondary_ip_range" {
+  description = "List of secondary IP ranges for each private subnet"
   type = list(object({
     range_name    = string
     ip_cidr_range = string
   }))
-
-  default     = []
-  description = "List of secondary IP ranges for the subnetwork. Each element in the list must have 'range_name' and 'ip_cidr_range' attributes."
-
+  default = []
 }
 
 variable "ip_cidr_range" {

@@ -41,5 +41,8 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_subnet_cidr"></a> [subnet\_cidr](#output\_subnet\_cidr) | The IPv4 CIDR ranges for the created subnets. |
+| <a name="output_subnet_name"></a> [subnet\_name](#output\_subnet\_name) | The name of the created subnet resources. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
