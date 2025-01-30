@@ -175,6 +175,6 @@ module "vpn_server" {
   environment  = local.environment
   zone         = format("%s-a", var.region)
   network_name = google_compute_network.network.self_link
-  subnetwork   = module.subnets.subnet_name
+  subnetwork   = module.subnets.subnet_name[0]
   machine_type = var.machine_type
 }
