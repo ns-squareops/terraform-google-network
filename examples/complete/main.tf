@@ -1,14 +1,11 @@
 locals {
   region       = "asia-south1"
-  environment  = ""
-  name         = ""
-  project_name = ""
+  environment  = "dev"
+  name         = "test"
+  project_name = "pelagic-tracker-447005-v4"
 
   # Define the private CIDR ranges only once
-  private_ip_cidr_range = [
-    "", # Private subnet 1
-    ""  # Private subnet 2
-  ]
+  private_ip_cidr_range = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
 }
 
 module "vpc" {
@@ -17,9 +14,9 @@ module "vpc" {
   project_name          = local.project_name
   environment           = local.environment
   region                = local.region
-  ip_cidr_range         = ""                          # Public subnet CIDR
+  ip_cidr_range         = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"] # Public subnet CIDR
   private_ip_cidr_range = local.private_ip_cidr_range # Pass CIDR ranges for private subnets
-  lb_ip_cidr_range      = ""                          # Load balancer proxy subnet
+  lb_ip_cidr_range      = "10.0.8.0/24"                         # Load balancer proxy subnet
 
   # Dynamically generate secondary IP ranges
   secondary_ip_range = [
@@ -32,5 +29,6 @@ module "vpc" {
   enable_nat_gateway       = true
   db_private_access        = true
   create_vpn               = false
-  vpc_flow_logs            = true
+  vpc_flow_logs            = false
+  # private_ipv6_google_access = false
 }

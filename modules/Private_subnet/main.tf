@@ -6,7 +6,7 @@ resource "google_compute_subnetwork" "private_subnet" {
   ip_cidr_range              = var.private_ip_cidr_range
   region                     = var.region
   private_ip_google_access   = true #var.private_ip_google_access
-  private_ipv6_google_access = var.private_ipv6_google_access
+  # private_ipv6_google_access = var.private_ipv6_google_access
   network                    = var.network_name
   project                    = var.project_id
   dynamic "log_config" {

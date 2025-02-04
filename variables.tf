@@ -107,8 +107,9 @@ variable "secondary_ip_range" {
 }
 
 variable "ip_cidr_range" {
-  type        = string
+  type        = list(string)
   description = "The IP CIDR range for the subnet."
+  default     = []
 }
 
 variable "private_ip_google_access" {
@@ -136,6 +137,7 @@ variable "private_ip_cidr_range" {
 }
 
 variable "lb_ip_cidr_range" {
-  type        = string
   description = "The IP CIDR range for the subnet."
+  type        = string
+  default     = ""
 }

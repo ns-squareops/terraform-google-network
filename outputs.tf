@@ -23,9 +23,10 @@ output "vpn_details" {
 output "public_subnet_details" {
   description = "Details of all public subnets created, including their names and CIDR ranges."
   value = [
-    for idx in range(length(module.subnets.subnet_name)) : {
-      name = module.subnets.subnet_name[idx]
-      cidr = module.subnets.subnet_cidr[idx]
+    for subnet in module.subnets : {
+      name               = subnet.subnet_name
+      cidr               = subnet.subnet_cidr
+      # secondary_ip_range = subnet.secondary_ip_range
     }
   ]
 }
@@ -50,3 +51,14 @@ output "lb_subnet_details" {
     }
   ]
 }
+
+# output "lb_subnet_details" {
+#   description = "Details of LB subnets created, including their names and CIDR ranges."
+#   value = [
+#     for subnet in module.LB_subnet : {
+#       name               = subnet.subnet_name
+#       private_ip_cidr    = subnet.subnet_cidr
+#       # secondary_ip_range = subent.secondary_ip_range
+#     }
+#   ]
+# }

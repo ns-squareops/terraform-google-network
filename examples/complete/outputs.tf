@@ -23,6 +23,7 @@ output "private_subnet_details" {
     }
   ]
 }
+
 output "lb_subnet_details" {
   description = "Details of LB subent created, including their names and CIDR ranges."
   value = [
@@ -32,3 +33,14 @@ output "lb_subnet_details" {
     }
   ]
 }
+
+# output "lb_subnet_details" {
+#   description = "Details of LB subent created, including their names and CIDR ranges."
+#   value = [
+#     for subnet in module.vpc.lb_subnet_details : {
+#       name = subnet.subnet_name
+#       cidr = subnet.subnet_cidr
+#       # secondary_ip_range = subnet.secondary_ip_range
+#     }
+#   ]
+# }
