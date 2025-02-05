@@ -3,6 +3,12 @@ locals {
   project_name = var.project_name
   environment  = var.environment
   name         = var.name
+  public_subnet_details = [
+    for subnet in module.subnets : {
+      name = subnet.subnet_name
+      cidr = subnet.subnet_cidr
+    }
+  ]
 }
 
 
@@ -174,6 +180,6 @@ module "vpn_server" {
   environment  = local.environment
   zone         = format("%s-a", var.region)
   network_name = google_compute_network.network.self_link
-  subnetwork   = module.subnets.subnet_name[0]
+  subnetwork = length(local.public_subnet_details) > 0 && length(local.public_subnet_details[0]["name"]) > 0 ? local.public_subnet_details[0]["name"][0] : ""
   machine_type = var.machine_type
 }

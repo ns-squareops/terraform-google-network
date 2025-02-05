@@ -1,7 +1,7 @@
 locals {
   region       = "asia-south1"
-  environment  = "dev"
-  name         = "test"
+  environment  = ""
+  name         = ""
   project_name = "pelagic-tracker-447005-v4"
 
   # Define the private CIDR ranges only once
