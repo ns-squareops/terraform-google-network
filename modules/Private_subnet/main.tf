@@ -10,7 +10,7 @@ resource "google_compute_subnetwork" "private_subnet" {
   network                    = var.network_name
   project                    = var.project_id
   dynamic "log_config" {
-    for_each = var.flow_logs ? [1] : []
+    for_each = var.Private_subnet_flow_logs ? [1] : []
 
     content {
       aggregation_interval = var.log_config.aggregation_interval

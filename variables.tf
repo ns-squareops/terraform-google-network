@@ -142,3 +142,14 @@ variable "lb_ip_cidr_range" {
   default     = ""
 }
 
+variable "Public_subnet_flow_logs" {
+  type        = bool
+  default     = false
+  description = "Enable or disable flow logging."
+}
+
+variable "Private_subnet_flow_logs" {
+  type        = bool
+  default     = false
+  description = "Enable or disable flow logging."
+}
