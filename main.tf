@@ -33,7 +33,7 @@ module "subnets" {
   secondary_ip_range         = var.secondary_ip_range
   network_name               = google_compute_network.network.self_link
   project_id                 = local.project_name
-  flow_logs                  = var.vpc_flow_logs
+  Public_subnet_flow_logs    = var.Public_subnet_flow_logs
   log_config                 = var.log_config
 }
 
@@ -49,7 +49,7 @@ module "private_subnet" {
   secondary_ip_range         = [var.secondary_ip_range[each.value]] # Pass as a list of objects
   network_name               = google_compute_network.network.self_link
   project_id                 = local.project_name
-  flow_logs                  = var.vpc_flow_logs
+  Private_subnet_flow_logs   = var.Private_subnet_flow_logs
   log_config                 = var.log_config
 }
 

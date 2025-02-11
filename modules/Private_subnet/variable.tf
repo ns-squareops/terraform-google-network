@@ -18,7 +18,7 @@ variable "project_id" {
   type        = string
 }
 
-variable "flow_logs" {
+variable "Private_subnet_flow_logs" {
   type        = bool
   default     = false
   description = "Enable or disable flow logging."

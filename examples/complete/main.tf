@@ -1,7 +1,7 @@
 locals {
   region       = "asia-south1"
-  environment  = ""
-  name         = ""
+  environment  = "dev"
+  name         = "test"
   project_name = "pelagic-tracker-447005-v4"
 
   # Define the private CIDR ranges only once
@@ -29,6 +29,7 @@ module "vpc" {
   enable_nat_gateway       = true
   db_private_access        = true
   create_vpn               = false
-  vpc_flow_logs            = false
+  Private_subnet_flow_logs = false     # enable flow logs for private subnet
+  Public_subnet_flow_logs  = false     # enable flow logs for public subnet
   # private_ipv6_google_access = false
 }
